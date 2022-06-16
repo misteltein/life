@@ -14,26 +14,43 @@ interface Location {
     y: number;
 }
 
+const SIZE_X = 100;
+const SIZE_Y = 100;
+
 
 const sketch = (p5: P5) => {
     let currentWorld: World = [];
     p5.setup = () => {
-        p5.createCanvas(300, 300);
+        p5.createCanvas(800, 800);
         p5.background(51);
-        currentWorld = randomWorld(100, 100, 0.4);
+        p5.frameRate(1);
+        currentWorld = randomWorld(100, 100, 0.2);
         view(currentWorld);
     };
 
     p5.draw = () => {
         const newWorld = computeNextGeneration(currentWorld);
-        view(currentWorld);
         // 収束していたら終了（振動は検出していない）
         if (equals(currentWorld, newWorld)) {
             p5.noLoop();
             console.log('terminated')
+        } else {
+            // 変化があれば採用
+            currentWorld = newWorld;
         }
-        // 変化があれば採用
-        currentWorld = newWorld;
+        const dx = p5.width / SIZE_X;
+        const dy = p5.height / SIZE_Y;
+        p5.noStroke();
+        currentWorld.forEach((row, i) => {
+            row.forEach((cell, j) => {
+                if (cell) {
+                    p5.fill(255);
+                } else {
+                    p5.fill(0);
+                }
+                p5.rect(i * dx, j * dy, dx, dy);
+            })
+        })
     }
 
     /**
