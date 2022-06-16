@@ -20,11 +20,7 @@ const sketch = (p5: P5) => {
     p5.setup = () => {
         p5.createCanvas(300, 300);
         p5.background(51);
-        currentWorld = [
-            [CellState.living, CellState.living, CellState.dead],
-            [CellState.living, CellState.dead, CellState.dead],
-            [CellState.dead, CellState.dead, CellState.dead],
-        ];
+        currentWorld = randomWorld(100, 100, 0.4);
         view(currentWorld);
     };
 
@@ -97,6 +93,25 @@ const sketch = (p5: P5) => {
                 return computeNextState(world, {x: i, y: j})
             })
         })
+    }
+
+    /**
+     * ランダムに世界を生成する
+     * @param {number} sizeX
+     * @param {number} sizeY
+     * @param {number} rate - 生きたセルの割合
+     * @return {World} - 生成した世界
+     */
+    function randomWorld(sizeX: number, sizeY: number, rate: number) {
+        const world = [];
+        for (let i = 0; i < sizeX; ++i) {
+            const row = [];
+            for (let j = 0; j < sizeY; ++j) {
+                row.push(Math.random() < rate);
+            }
+            world.push(row);
+        }
+        return world;
     }
 
     /**
