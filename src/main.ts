@@ -29,12 +29,15 @@ const sketch = (p5: P5) => {
     };
 
     p5.draw = () => {
-        currentWorld = currentWorld.map((row: Array<CellStateType>, i: number) => {
-            return row.map((cell: CellStateType, j: number) => {
-                return computeNextState(currentWorld, {x: i, y: j})
-            })
-        })
-        p5.noLoop();
+        const newWorld = computeNextGeneration(currentWorld);
+        view(currentWorld);
+        // 収束していたら終了（振動は検出していない）
+        if (equals(currentWorld, newWorld)) {
+            p5.noLoop();
+            console.log('terminated')
+        }
+        // 変化があれば採用
+        currentWorld = newWorld;
     }
 
     /**
@@ -44,7 +47,7 @@ const sketch = (p5: P5) => {
      * @return {CellStateType} - セルの状態
      */
     function getState(world: World, p: Location): CellStateType {
-        return world[p.x][p.y];
+        return world?.[p.x]?.[p.y];
     }
 
     /**
@@ -58,7 +61,7 @@ const sketch = (p5: P5) => {
         for (let i = -1; i <= 1; ++i) {
             for (let j = -1; j <= 1; ++j) {
                 if (i === 0 && j === 0) continue;
-                if (getState(world, p) === CellState.living) {
+                if (getState(world, {x: p.x + i, y: p.y + j})) {
                     count += 1;
                 }
             }
@@ -83,6 +86,36 @@ const sketch = (p5: P5) => {
         }
     }
 
+    /**
+     * 世界を時間発展させる
+     * @param {World} world - 元になる世界
+     * @return {World} - 新しい世界
+     */
+    function computeNextGeneration(world: World) {
+        return world.map((row: Array<CellStateType>, i: number) => {
+            return row.map((cell: CellStateType, j: number) => {
+                return computeNextState(world, {x: i, y: j})
+            })
+        })
+    }
+
+    /**
+     * 二つの世界が等しいか
+     * @param {World} w1
+     * @param {World} w2
+     * @return {boolean} 等しい
+     */
+    function equals(w1: World, w2: World): boolean {
+        return w1.every((row: Array<boolean>, i: number) => {
+            return row.every((cell: boolean, j: number) => cell === w2[i][j])
+        });
+    }
+
+    /**
+     * console.log に世界のパターンを表示
+     * 簡単なデバッグ用
+     * @param {World} world
+     */
     function view(world: World): void {
         const res = world.map((row: Array<boolean>) => {
             return row.map((cell: CellStateType) => {
