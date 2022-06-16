@@ -17,7 +17,6 @@ interface Location {
 const SIZE_X = 150;
 const SIZE_Y = 100;
 
-
 const sketch = (p5: P5) => {
     let currentWorld: World = [];
     let selectedMode: P5.Element;
