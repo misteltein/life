@@ -14,17 +14,25 @@ interface Location {
     y: number;
 }
 
-const SIZE_X = 100;
+const SIZE_X = 150;
 const SIZE_Y = 100;
 
 
 const sketch = (p5: P5) => {
     let currentWorld: World = [];
+    let selectedMode: P5.Element;
     p5.setup = () => {
-        p5.createCanvas(800, 800);
+        p5.createCanvas(900, 600);
         p5.background(51);
         p5.frameRate(1);
-        currentWorld = randomWorld(100, 100, 0.2);
+
+        selectedMode = p5.createSelect();
+        selectedMode.option('random 0.10');
+        selectedMode.option('random 0.25');
+        selectedMode.option('random 0.50');
+        selectedMode.option('random 0.75');
+        selectedMode.changed(handleChangeMode);
+        currentWorld = randomWorld(SIZE_X, SIZE_Y, 0.2);
         view(currentWorld);
     };
 
@@ -51,6 +59,29 @@ const sketch = (p5: P5) => {
                 p5.rect(i * dx, j * dy, dx, dy);
             })
         })
+    }
+
+    function handleChangeMode() {
+        const item = selectedMode.value();
+        if (item === 'random 0.2') {
+            currentWorld = randomWorld(SIZE_X, SIZE_Y, 0.2);
+        }
+        switch (selectedMode.value()) {
+            case 'random 0.10':
+                currentWorld = randomWorld(SIZE_X, SIZE_Y,0.1);
+                break;
+            case 'random 0.25':
+                currentWorld = randomWorld(SIZE_X, SIZE_Y, 0.25);
+                break;
+            case 'random 0.50':
+                currentWorld = randomWorld(SIZE_X, SIZE_Y, 0.5);
+                break;
+            case 'random 0.75':
+                currentWorld = randomWorld(SIZE_X, SIZE_Y,0.75);
+                break;
+            default:
+                currentWorld = randomWorld(SIZE_X, SIZE_Y, 0.1);
+        }
     }
 
     /**
