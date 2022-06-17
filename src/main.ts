@@ -66,7 +66,7 @@ const sketch = (p5: P5) => {
         radioSpeed.changed(handleChangeFrameRate);
 
         // エディターモードの切り替え
-        checkboxEditor = p5.createCheckbox('Create mode', false);
+        checkboxEditor = p5.createCheckbox('Create', false);
         checkboxEditor.changed(() => {
             EditorMode = checkboxEditor.checked()
             if (EditorMode) {
