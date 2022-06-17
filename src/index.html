@@ -3,12 +3,29 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>p5-typescript-starter</title>
+    <title>Conway's life game</title>
     <script type="module" src="main.ts"></script>
     　
+    <!--p5 が生成する要素がどうしようもなかったのでスタイルがひどい-->
     <style>
         body {
             text-align: center;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+        select{
+            width: 200px;
+            margin: 20px auto;
+        }
+        div {
+            display: block;
+            width: 370px;
+            text-align: left;
+            margin: 2px auto;
+        }
+        label{
+            margin-right: 10px;
         }
     </style>
 </head>
