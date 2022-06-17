@@ -90,7 +90,7 @@ const sketch = (p5: P5) => {
      * @return {CellStateType} - セルの状態
      */
     function getState(world: World, p: Location): CellStateType {
-        return world?.[p.x]?.[p.y];
+        return world?.[p.x%SIZE_X]?.[p.y%SIZE_Y];
     }
 
     /**
