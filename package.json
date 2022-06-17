@@ -3,7 +3,7 @@
   "scripts": {
     "dev": "parcel src/index.html --open",
     "build": "parcel build src/index.html",
-    "build:github": "parcel build src/index.html --dist-dir docs --public-url https://misteltein.github.io/life/",
+    "build:github": "parcel build src/index.html --dist-dir docs",
     "lint:eslint": "eslint . --ext ts",
     "fix:eslint": "eslint . --ext ts --fix",
     "lint:prettier": "prettier --check src",
