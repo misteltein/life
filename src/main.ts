@@ -17,9 +17,12 @@ interface Location {
 const SIZE_X = 150;
 const SIZE_Y = 100;
 
+let PBC = true;
+
 const sketch = (p5: P5) => {
     let currentWorld: World = [];
     let selectedMode: P5.Element;
+    let checkboxPBC: P5.Element;
     p5.setup = () => {
         p5.createCanvas(900, 600);
         p5.background(51);
@@ -31,6 +34,10 @@ const sketch = (p5: P5) => {
         selectedMode.option('random 0.50');
         selectedMode.option('random 0.75');
         selectedMode.changed(handleChangeMode);
+        checkboxPBC = p5.createCheckbox('PBC', true);
+        checkboxPBC.changed(() => {
+            PBC = checkboxPBC.checked()
+        })
         currentWorld = randomWorld(SIZE_X, SIZE_Y, 0.2);
         view(currentWorld);
     };
@@ -67,7 +74,7 @@ const sketch = (p5: P5) => {
         }
         switch (selectedMode.value()) {
             case 'random 0.10':
-                currentWorld = randomWorld(SIZE_X, SIZE_Y,0.1);
+                currentWorld = randomWorld(SIZE_X, SIZE_Y, 0.1);
                 break;
             case 'random 0.25':
                 currentWorld = randomWorld(SIZE_X, SIZE_Y, 0.25);
@@ -76,7 +83,7 @@ const sketch = (p5: P5) => {
                 currentWorld = randomWorld(SIZE_X, SIZE_Y, 0.5);
                 break;
             case 'random 0.75':
-                currentWorld = randomWorld(SIZE_X, SIZE_Y,0.75);
+                currentWorld = randomWorld(SIZE_X, SIZE_Y, 0.75);
                 break;
             default:
                 currentWorld = randomWorld(SIZE_X, SIZE_Y, 0.1);
@@ -90,7 +97,11 @@ const sketch = (p5: P5) => {
      * @return {CellStateType} - セルの状態
      */
     function getState(world: World, p: Location): CellStateType {
-        return world?.[p.x%SIZE_X]?.[p.y%SIZE_Y];
+        if (PBC) {
+            return world?.[p.x % SIZE_X]?.[p.y % SIZE_Y];
+        }else{
+            return world?.[p.x]?.[p.y];
+        }
     }
 
     /**
