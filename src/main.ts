@@ -112,7 +112,7 @@ const sketch = (p5: P5) => {
         })
     }
 
-    p5.mouseClicked = () => {
+    p5.touchStarted = () => {
         if (EditorMode) {
             if (
                 p5.mouseX >= 0 && p5.mouseX <= p5.width &&
