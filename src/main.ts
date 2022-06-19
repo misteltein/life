@@ -195,8 +195,14 @@ const sketch = (p5: P5) => {
      */
     function getState(world: World, p: Location): CellStateType {
         if (PBC) {
-            const x = p.x < 0 ? p.x + SIZE_X : SIZE_X <= p.x ? p.x - SIZE_X : p.x
-            const y = p.y < 0 ? p.y + SIZE_Y : SIZE_Y <= p.y ? p.y - SIZE_Y : p.y
+            // Todo: 小さいワールドから巨大なワールドに成長させる場合があるので，隣だけ考えるいまの方法ではだめ
+            const nearBy = (a: number, size: number): number => {
+                if (a < 0) return nearBy(a + size, size);
+                if (size <= a) return nearBy(a - size, size);
+                return a;
+            }
+            const x = nearBy(p.x, SIZE_X); // p.x < 0 ? p.x + SIZE_X : SIZE_X <= p.x ? p.x - SIZE_X : p.x
+            const y = nearBy(p.y, SIZE_Y); // p.y < 0 ? p.y + SIZE_Y : SIZE_Y <= p.y ? p.y - SIZE_Y : p.y
             return world[x][y];
         } else {
             return world[p.x]?.[p.y];
